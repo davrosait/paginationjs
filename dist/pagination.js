@@ -105,7 +105,8 @@
       render: function(isBoot) {
         var self = this;
         var model = self.model;
-        var el = model.el || $('<div class="paginationjs"></div>');
+        //var el = model.el || $('<div class="paginationjs"></div>');
+        var el = $(".paginationjs").length > 0 ? $(".paginationjs") : $('<div class="paginationjs"></div>');
         var isForced = isBoot !== true;
 
         self.callHook('beforeRender', isForced);
@@ -641,10 +642,12 @@
 
       observer: function() {
         var self = this;
-        var el = self.model.el;
+        //var el = self.model.el;
+        var el = $(".paginationjs");
+        var eventContainer = $(container[0]);
 
         // Go to specified page number
-        container.on(eventPrefix + 'go', function(event, pageNumber, done) {
+        eventContainer.on(eventPrefix + 'go', function(event, pageNumber, done) {
           pageNumber = parseInt($.trim(pageNumber));
 
           if (!pageNumber) return;
@@ -717,7 +720,7 @@
           // Before Go button clicked
           if (self.callHook('beforeGoButtonOnClick', event, pageNumber) === false) return false;
 
-          container.trigger(eventPrefix + 'go', pageNumber);
+          eventContainer.trigger(eventPrefix + 'go', pageNumber);
 
           // After Go button clicked
           self.callHook('afterGoButtonOnClick', event, pageNumber);
@@ -731,7 +734,7 @@
             // Before Go input enter
             if (self.callHook('beforeGoInputOnEnter', event, pageNumber) === false) return false;
 
-            container.trigger(eventPrefix + 'go', pageNumber);
+            eventContainer.trigger(eventPrefix + 'go', pageNumber);
 
             // Regains focus
             $('.J-paginationjs-go-pagenumber', el).focus();
@@ -742,42 +745,42 @@
         });
 
         // Previous page
-        container.on(eventPrefix + 'previous', function(event, done) {
+        eventContainer.on(eventPrefix + 'previous', function(event, done) {
           self.previous(done);
         });
 
         // Next page
-        container.on(eventPrefix + 'next', function(event, done) {
+        eventContainer.on(eventPrefix + 'next', function(event, done) {
           self.next(done);
         });
 
         // Disable
-        container.on(eventPrefix + 'disable', function() {
+        eventContainer.on(eventPrefix + 'disable', function() {
           self.disable();
         });
 
         // Enable
-        container.on(eventPrefix + 'enable', function() {
+        eventContainer.on(eventPrefix + 'enable', function() {
           self.enable();
         });
 
         // Refresh
-        container.on(eventPrefix + 'refresh', function(event, done) {
+        eventContainer.on(eventPrefix + 'refresh', function(event, done) {
           self.refresh(done);
         });
 
         // Show
-        container.on(eventPrefix + 'show', function() {
+        eventContainer.on(eventPrefix + 'show', function() {
           self.show();
         });
 
         // Hide
-        container.on(eventPrefix + 'hide', function() {
+        eventContainer.on(eventPrefix + 'hide', function() {
           self.hide();
         });
 
         // Destroy
-        container.on(eventPrefix + 'destroy', function() {
+        eventContainer.on(eventPrefix + 'destroy', function() {
           self.destroy();
         });
 
@@ -789,7 +792,7 @@
           defaultPageNumber = 1;
         }
         if (attributes.triggerPagingOnInit) {
-          container.trigger(eventPrefix + 'go', Math.min(defaultPageNumber, validTotalPage));
+          eventContainer.trigger(eventPrefix + 'go', Math.min(defaultPageNumber, validTotalPage));
         }
       }
     };
